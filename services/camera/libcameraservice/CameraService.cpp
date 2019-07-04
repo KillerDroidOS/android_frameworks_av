@@ -1459,7 +1459,7 @@ Status CameraService::connectHelper(const sp<CALLBACK>& cameraCb, const String8&
 
             sp<ICameraMotor> cameraMotor = ICameraMotor::getService();
             if (cameraMotor != nullptr) {
-                cameraMotor->onConnect(cameraId.string());
+                cameraMotor->onConnect(std::stoi(cameraId.string()));
             }
         }
     } // lock is destroyed, allow further connect calls
@@ -2206,9 +2206,9 @@ binder::Status CameraService::BasicClient::disconnect() {
     }
     mDisconnected = true;
 
-    sp<ICameraMotor> motor_service = ICameraMotor::getService();
-    if (motor_service != nullptr) {
-        motor_service->onDisconnect(std::stoi(mCameraIdStr.string()));
+    sp<ICameraMotor> cameraMotor = ICameraMotor::getService();
+    if (cameraMotor != nullptr) {
+        cameraMotor->onDisconnect(std::stoi(mCameraIdStr.string()));
     }
 
     sCameraService->removeByClient(this);
